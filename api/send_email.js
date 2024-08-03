@@ -1,33 +1,39 @@
-// api/send_email.js
 const nodemailer = require('nodemailer');
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { name, email, subject, message } = req.body;
+exports.handler = async function (event, context) {
+  // Parse form data from the event body
+  const { name, email, subject, message } = JSON.parse(event.body);
 
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'fredrickmureti612@gmail.com',
-        pass: 'yjdxsxvdrpruglov', // Use app password if 2FA is enabled
-      },
-    });
-
-    let mailOptions = {
-      from: email,
-      to: 'fredrickmureti612@gmail.com',
-      subject: subject,
-      text: `${message}\n\nFrom: ${name} <${email}>`,
-    };
-
-    try {
-      await transporter.sendMail(mailOptions);
-      res.status(200).json({ message: 'Mail sent successfully!' });
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to send mail.' });
+  // Create a transporter
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'fredrickmureti612@gmail.com', // Your Gmail address
+      pass: 'yjdxsxvdrpruglov' // Your Gmail App Password
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+  });
+
+  // Setup email data
+  let mailOptions = {
+    from: 'fredrickmureti612@gmail.com',
+    to: 'fredrickmureti612@gmail.com',
+    subject: subject,
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+  };
+
+  // Send email
+  try {
+    let info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+    return {
+      statusCode: 200,
+      body: 'Email sent successfully!'
+    };
+  } catch (error) {
+    console.error('Error sending email: ' + error);
+    return {
+      statusCode: 500,
+      body: 'Failed to send email.'
+    };
   }
-}
+};
