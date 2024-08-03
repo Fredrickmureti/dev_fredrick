@@ -8,8 +8,8 @@ export default async function handler(req, res) {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-app-password', // Use app password if 2FA is enabled
+        user: 'fredrickmureti612@gmail.com',
+        pass: 'yjdxsxvdrpruglov', // Use app password if 2FA is enabled
       },
     });
 
