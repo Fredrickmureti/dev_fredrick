@@ -1,6 +1,16 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "css/*", "use": "@vercel/static" },
+    { "src": "fonts/*", "use": "@vercel/static" },
+    { "src": "images/*", "use": "@vercel/static" },
+    { "src": "js/*", "use": "@vercel/static" },
+    { "src": "scss/*", "use": "@vercel/static" },
+    { "src": "api/send_email.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/send_email.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
