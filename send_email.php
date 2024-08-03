@@ -1,53 +1,40 @@
 <?php
+// Allow requests from your frontend domain
 header("Access-Control-Allow-Origin: https://dev-fredrick.vercel.app");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-
+// Your existing code for sending email
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Ensure this path is correct
+// Load Composer's autoloader
+require 'vendor/autoload.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect POST data
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $subject = $_POST['subject'] ?? '';
-    $message = $_POST['message'] ?? '';
+$mail = new PHPMailer(true);
 
-    // Validate the input
-    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
-        echo 'All fields are required.';
-        exit;
-    }
+try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to send through
+    $mail->SMTPAuth = true;
+    $mail->Username = 'fredrickmureti612@gmail.com'; // SMTP username
+    $mail->Password = 'yjdxsxvdrpruglov'; // SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
 
-    $mail = new PHPMailer(true);
+    // Recipients
+    $mail->setFrom('fredrickmureti612@gmail.com', 'Mailer');
+    $mail->addAddress('fredrickmureti612@gmail.com');
 
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'fredrickmureti612@gmail.com'; // Replace with your Gmail address
-        $mail->Password = 'yjdxsxvdrpruglov'; // Replace with your Gmail app password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+    // Content
+    $mail->isHTML(true);
+    $mail->Subject = $_POST['subject'];
+    $mail->Body    = $_POST['message'];
 
-        // Recipients
-        $mail->setFrom($email, $name);
-        $mail->addAddress('fredrickmureti612@gmail.com'); // Replace with your Gmail address
-
-        // Content
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = nl2br(htmlspecialchars($message));
-
-        $mail->send();
-        echo 'Mail sent successfully!';
-    } catch (Exception $e) {
-        echo "Failed to send mail. Mailer Error: {$mail->ErrorInfo}";
-    }
-} else {
-    echo 'Invalid request method.';
+    $mail->send();
+    echo 'Mail sent successfully!';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
 }
+?>
