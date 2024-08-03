@@ -1,27 +1,21 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/send_email.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/status.js",
-      "use": "@vercel/node"
-    }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "css/**", "use": "@vercel/static" },
+    { "src": "fonts/**", "use": "@vercel/static" },
+    { "src": "images/**", "use": "@vercel/static" },
+    { "src": "js/**", "use": "@vercel/static" },
+    { "src": "scss/**", "use": "@vercel/static" },
+    { "src": "api/send_email.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/api/send_email",
-      "dest": "/api/send_email.js"
-    },
-    {
-      "src": "/api/status",
-      "dest": "/api/status.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/api/(.*)", "dest": "/api/send_email.js" },
+    { "src": "/css/(.*)", "dest": "/css/$1" },
+    { "src": "/fonts/(.*)", "dest": "/fonts/$1" },
+    { "src": "/images/(.*)", "dest": "/images/$1" },
+    { "src": "/js/(.*)", "dest": "/js/$1" },
+    { "src": "/scss/(.*)", "dest": "/scss/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
