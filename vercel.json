@@ -10,7 +10,7 @@
     { "src": "api/send_email.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/send_email.js" },
+    { "src": "/api/send_email", "dest": "/api/send_email.js" },
     { "src": "/css/(.*)", "dest": "/css/$1" },
     { "src": "/fonts/(.*)", "dest": "/fonts/$1" },
     { "src": "/images/(.*)", "dest": "/images/$1" },
